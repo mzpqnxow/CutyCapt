@@ -79,7 +79,30 @@ Install the distribution package for Xvfb. This is a headless Xorg display that 
 $ xvfb-run --server-args="-screen 0, 1024x768x24" ./CutyCapt --url=... --out=...
 ```
 
-Optionally, use the `capwrap.sh` script included here
+### Headless Usage with `capwrap.sh`
+
+Use the `capwrap.sh` script to help to automate repetitive captures. It does some timeout and cleanup work for you and saves the output in a uniform location/format.
+
+```
+$ ./capwrap.sh
+Usage:
+  ./capwrap.sh <HOST> <PROTOCOL> <PORT> [URI]
+```
+
+One of the most convenient simple checks that `capwrap.sh` does is check to make sure the remote port is open, in case your input is not confirmed ahead of time. It does this very simply using the netcat zero i/o flag along with a predefined timeout (`nc -w 5 -z host port`) and will abort if the port is not open, safing the CPU and RAM involved in allowing the X server to start and the browser to attempt to render the page
+
+#### Example Usage - Standard HTTPS on Port 443
+
+```
+$ ./capwrap.sh google.com https 443
+```
+
+#### Example Usage - HTTPS on Non-standard Port
+
+```
+$ ./capwrap.sh google.com http 8080
+```
+
 
 ## License
 
