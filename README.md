@@ -12,6 +12,12 @@ For dependencies, you'll need the Qt4 or Qt5 development packages installed. As 
 $ sudo apt-get install build-essential libqt4-dev libqtwebkit-dev
 ```
 
+If you plan to use this for headless captures, install Xvfb:
+
+```
+$ sudo apt-get install xvfb
+```
+
 With the dependencies handled, you can use `qmake` to generate a GNU Makefile, then standard GNU `make` to build `CutyCapt`
 
 ```
@@ -70,6 +76,8 @@ Install the distribution package for Xvfb. This is a headless Xorg display that 
 ```
 $ xvfb-run --server-args="-screen 0, 1024x768x24" ./CutyCapt --url=... --out=...
 ```
+
+Optionally, use the `capwrap.sh` script included here
 
 ## License
 
