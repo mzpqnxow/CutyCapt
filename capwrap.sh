@@ -36,18 +36,18 @@ declare -r PORT="$3"
 declare -r URI="$4"
 declare -r URL="${PROTOCOL}://${HOST}:${PORT}${URI}"
 declare -r OUTFILE="${OUTPATH}/${URL//\//@}.${IMGFMT}"
-echo "Testing port (${NC_TIMEOUT} seconds ...)"
+echo -n "Testing open port ${HOST}:${PORT} with ${NC_TIMEOUT} second timeout ... "
 nc -z -w "${NC_TIMEOUT}" "${HOST}" "${PORT}"
 if [ $? -ne 0 ]; then
-  echo "${HOST}:${PORT} is not open, exiting ..."
+  echo "not open, exiting ..."
   exit
 fi
-echo "Port is open ..."
+echo " open, continuing ..."
 mkdir -p "${OUTPATH}"
 # If LOCKFILE is not set, this will evaluate to false
 # so no errors. Just comment out LOCKFILE declaration
 # above if you don't want/need it
-[[ -f "${LOCKFILE}" ]] && rm =-rf "${LOCKFILE}"
+[[ -f "${LOCKFILE}" ]] && rm -rf "${LOCKFILE}"
 echo "Capturing ${URL} -> ${OUTFILE}"
 xvfb-run \
    --server-args="${XVFB_ARGS}" \
