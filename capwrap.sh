@@ -37,7 +37,8 @@ declare -r URI="$4"
 declare -r URL="${PROTOCOL}://${HOST}:${PORT}${URI}"
 declare -r OUTFILE="${OUTPATH}/${URL//\//@}.${IMGFMT}"
 echo -n "Testing open port ${HOST}:${PORT} with ${NC_TIMEOUT} second timeout ... "
-if nc -z -w "${NC_TIMEOUT}" "${HOST}" "${PORT}"; then
+nc -z -w "${NC_TIMEOUT}" "${HOST}" "${PORT}"
+if [ $? -ne 0 ]; then
   echo 'not open, exiting!'
   exit
 fi
