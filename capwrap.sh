@@ -26,7 +26,8 @@ declare -r FB_X=1366
 declare -r FB_Y=694
 # Framebuffer color depth
 declare -r FB_D=24
-declare -r XVFB_ARGS="-screen 0, ${FB_X}x${FB_Y}x${FB_D}"
+declare -r SCREEN=1
+declare -r XVFB_ARGS="-screen ${SCREEN}, ${FB_X}x${FB_Y}x${FB_D}"
 declare -r IMGFMT="png"
 declare -r URL="$1"
 declare -r OUTFILE="${OUTPATH}/${URL//\//@}.${IMGFMT}"
