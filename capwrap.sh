@@ -27,15 +27,19 @@ declare -r FB_X=1366
 declare -r FB_Y=694
 # Framebuffer color depth
 declare -r FB_D=24
-declare -r SCREEN=1
+declare -r SCREEN=0
+# No modern Xorg build defaults to TCP listen anymore, but best to be explicit
 declare -r XVFB_ARGS="-screen ${SCREEN}, ${FB_X}x${FB_Y}x${FB_D} -nolisten tcp"
 declare -r IMGFMT="png"
 declare -r HOST="$1"
 declare -r PROTOCOL="$2"
 declare -r PORT="$3"
+# URI must start with a / if it is specified ...
 declare -r URI="$4"
 declare -r URL="${PROTOCOL}://${HOST}:${PORT}${URI}"
 declare -r OUTFILE="${OUTPATH}/${URL//\//@}.${IMGFMT}"
+
+# If the port is closed or filtered, do not bother invoking Xvfb and wasting resources
 echo -n "Testing open port ${HOST}:${PORT} with ${NC_TIMEOUT} second timeout ... "
 nc -z -w "${NC_TIMEOUT}" "${HOST}" "${PORT}"
 if [ $? -ne 0 ]; then
@@ -46,10 +50,14 @@ echo 'open, continuing!'
 mkdir -p "${OUTPATH}"
 # If LOCKFILE is not set, this will evaluate to false
 # so no errors. Just comment out LOCKFILE declaration
-# above if you don't want/need it
+# above if you don't want/need it. There is a cleaner
+# way to avoid the locking issue, and it is probably
+# symptomatic of a larger issue but for now this works
+# fine and all of the screencaps work, so meh
 [[ -f "${LOCKFILE}" ]] && rm -rf "${LOCKFILE}"
 echo "Capturing ${URL} -> ${OUTFILE}"
 xvfb-run \
+  -a \
    --server-args="${XVFB_ARGS}" \
    -e /dev/stdout \
   "${CUTYCAPT}" \
