@@ -1,0 +1,8 @@
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.ps
+Makefile
+*.o
+CutyCapt
