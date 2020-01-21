@@ -4,6 +4,8 @@ A Qt WebKit Web Page Rendering Capture Utility [sourceforce](http://cutycapt.sou
 
 There does not seem to be an officially maintained "upstream" CutyCapt repository, though there are some maintainers for downstream distribution packages. I do not know who they are
 
+This repository is maintained by [mzpqnxow@github.com](https://github.com/mzpqnxow)
+
 ## Building
 
 For dependencies, you'll need the Qt4 or Qt5 development packages installed. As of Debian 10 (Buster) you can build this fine using the Qt4 libraries
