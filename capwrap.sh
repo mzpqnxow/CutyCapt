@@ -28,7 +28,7 @@ declare -r FB_Y=694
 # Framebuffer color depth
 declare -r FB_D=24
 declare -r SCREEN=1
-declare -r XVFB_ARGS="-screen ${SCREEN}, ${FB_X}x${FB_Y}x${FB_D}"
+declare -r XVFB_ARGS="-screen ${SCREEN}, ${FB_X}x${FB_Y}x${FB_D} -nolisten tcp"
 declare -r IMGFMT="png"
 declare -r HOST="$1"
 declare -r PROTOCOL="$2"
@@ -37,12 +37,11 @@ declare -r URI="$4"
 declare -r URL="${PROTOCOL}://${HOST}:${PORT}${URI}"
 declare -r OUTFILE="${OUTPATH}/${URL//\//@}.${IMGFMT}"
 echo -n "Testing open port ${HOST}:${PORT} with ${NC_TIMEOUT} second timeout ... "
-nc -z -w "${NC_TIMEOUT}" "${HOST}" "${PORT}"
-if [ $? -ne 0 ]; then
-  echo "not open, exiting ..."
+if nc -z -w "${NC_TIMEOUT}" "${HOST}" "${PORT}"; then
+  echo 'not open, exiting!'
   exit
 fi
-echo " open, continuing ..."
+echo 'open, continuing!'
 mkdir -p "${OUTPATH}"
 # If LOCKFILE is not set, this will evaluate to false
 # so no errors. Just comment out LOCKFILE declaration
