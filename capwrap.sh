@@ -9,11 +9,12 @@
 #
 # (C) 2020 github@mzpqnxow.com / BSD-3-Clause
 #
-if [ $# -ne 1 ]; then
+if [ $# -lt 3 ]; then
   echo Usage:
-  echo "  $0 <URL>"
+  echo "  $0 <HOST> <PROTOCOL> <PORT> [URI]"
   exit
 fi
+declare -r NC_TIMEOUT=5
 declare -r LOCKFILE=/tmp/.X99-lock
 declare -r BASE=~/capwrap
 declare -r CUTYCAPT=$(which CutyCapt)
@@ -29,9 +30,19 @@ declare -r FB_D=24
 declare -r SCREEN=1
 declare -r XVFB_ARGS="-screen ${SCREEN}, ${FB_X}x${FB_Y}x${FB_D}"
 declare -r IMGFMT="png"
-declare -r URL="$1"
+declare -r HOST="$1"
+declare -r PROTOCOL="$2"
+declare -r PORT="$3"
+declare -r URI="$4"
+declare -r URL="${PROTOCOL}://${HOST}:${PORT}${URI}"
 declare -r OUTFILE="${OUTPATH}/${URL//\//@}.${IMGFMT}"
-
+echo "Testing port (${NC_TIMEOUT} seconds ...)"
+nc -z -w "${NC_TIMEOUT}" "${HOST}" "${PORT}"
+if [ $? -ne 0 ]; then
+  echo "${HOST}:${PORT} is not open, exiting ..."
+  exit
+fi
+echo "Port is open ..."
 mkdir -p "${OUTPATH}"
 # If LOCKFILE is not set, this will evaluate to false
 # so no errors. Just comment out LOCKFILE declaration
