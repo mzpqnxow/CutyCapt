@@ -14,7 +14,10 @@ if [ $# -ne 1 ]; then
   echo "  $0 <URL>"
   exit
 fi
-
+declare -r BASE=~/capwrap
+declare -r CUTYCAPT=$(which CutyCapt)
+declare -r DATE="$(date +%Y%m%d)"
+declare -r OUTPATH="${BASE}/${DATE}"
 # Maximum rendor in seconds
 declare -r RENDER_TIMEOUT=90
 # Framebuffer length/width
@@ -25,12 +28,14 @@ declare -r FB_D=24
 declare -r XVFB_ARGS="-screen 0, ${FB_X}x${FB_Y}x${FB_D}"
 declare -r IMGFMT="png"
 declare -r URL="$1"
-declare -r OUTFILE="${URL//\//@}.${IMGFMT}"
+declare -r OUTFILE="${OUTPATH}/${URL//\//@}.${IMGFMT}"
+
+mkdir -p "${OUTPATH}"
 echo "Capturing ${URL} -> ${OUTFILE}"
 xvfb-run \
    --server-args="${XVFB_ARGS}" \
    -e /dev/stdout \
-  ./CutyCapt \
+  "${CUTYCAPT}" \
   --out="${OUTFILE}" \
   --url="${URL}" \
   --java=off \
