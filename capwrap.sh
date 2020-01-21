@@ -14,12 +14,13 @@ if [ $# -ne 1 ]; then
   echo "  $0 <URL>"
   exit
 fi
+declare -r LOCKFILE=/tmp/.X99-lock
 declare -r BASE=~/capwrap
 declare -r CUTYCAPT=$(which CutyCapt)
 declare -r DATE="$(date +%Y%m%d)"
 declare -r OUTPATH="${BASE}/${DATE}"
 # Maximum rendor in seconds
-declare -r RENDER_TIMEOUT=90
+declare -r RENDER_TIMEOUT=15
 # Framebuffer length/width
 declare -r FB_X=1366
 declare -r FB_Y=694
@@ -31,6 +32,10 @@ declare -r URL="$1"
 declare -r OUTFILE="${OUTPATH}/${URL//\//@}.${IMGFMT}"
 
 mkdir -p "${OUTPATH}"
+# If LOCKFILE is not set, this will evaluate to false
+# so no errors. Just comment out LOCKFILE declaration
+# above if you don't want/need it
+[[ -f "${LOCKFILE}" ]] && rm =-rf "${LOCKFILE}"
 echo "Capturing ${URL} -> ${OUTFILE}"
 xvfb-run \
    --server-args="${XVFB_ARGS}" \
