@@ -64,6 +64,7 @@ xvfb-run \
   --out="${OUTFILE}" \
   --url="${URL}" \
   --java=off \
+  --javascript=on \
   --plugins=off \
   --private-browsing=on \
   --js-can-open-windows=off \
